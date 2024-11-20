@@ -26,7 +26,7 @@ int main () {
   
   do {
     menu();
-    printf("Escolha uma op√ß√£o: ");
+    printf("Escolha uma opÁ„o: ");
     scanf("%d", &opcao);
     fflush(stdin);
 
@@ -41,24 +41,24 @@ int main () {
       break;
     
     default:
-      printf("Op√ß√£o invalida! Tente novamente");
+      printf("OpÁ„o invalida! Tente novamente");
       break;
     }
   } while (opcao != 0);
 };
 
 void menu() {
-  printf("\nMenu de Op√ß√µes\n");
+  printf("\nMenu de OpÁıes\n");
   printf("1 - Cadastrar casa\n");
   printf("2 - Registrar consumo mensal\n");
-  printf("3 - Exibir casas acima da m√©dia\n");
-  printf("4 - Exibir casas abaixo da m√©dia\n");
+  printf("3 - Exibir casas acima da mÈdia\n");
+  printf("4 - Exibir casas abaixo da mÈdia\n");
   printf("0 - Sair\n");
 };
 
 void cadastrarCasa(Residencia casas[], int *quantidade) {
     if (*quantidade >= MAX_CASAS) {
-        printf("Capacidade m√°xima de casas atingida!\n");
+        printf("Capacidade m·xima de casas atingida!\n");
         return;
     }
 
