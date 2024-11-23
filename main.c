@@ -15,6 +15,7 @@ typedef struct {
 
 void menu();
 void cadastrarCasa(Residencia casas[], int *quantidade);
+void registrarConsumoMensal(Residencia casas[], int *quantidade);
 
 int main () {
 
@@ -34,6 +35,9 @@ int main () {
     case 1:
       cadastrarCasa(casas, &quantidadeCasas);
       fflush(stdin);
+      break;
+    case 2: 
+      registrarConsumoMensal(casas, &quantidadeCasas);
       break;
     case 0:
       printf("Encerrando programa... \n");
@@ -83,4 +87,35 @@ void cadastrarCasa(Residencia casas[], int *quantidade) {
     casas[*quantidade] = novaCasa;
     (*quantidade)++;
     printf("Casa cadastrada com sucesso!\n");
+}
+
+void registrarConsumoMensal(Residencia casas[], int *quantidade) {
+  int id, mes;
+  float consumo;
+  printf("Digite o ID da casa: ");
+  scanf("%d", &id);
+
+  int encontrada = 0;
+  for (int i = 0; i < *quantidade; i++) {
+    if (casas[i].id == id) {
+      encontrada = 1;
+      printf("Digite o mês (1-12): ");
+      scanf("%d", &mes);
+
+      if (mes < 1 || mes > 12) {
+        printf("Mês inválido! Tente novamente.\n");
+          return;
+      }
+
+        printf("Digite o consumo em metros cúbicos: ");
+        scanf("%f", &consumo);
+        casas[i].consumo[mes - 1] = consumo;
+        printf("Consumo registrado com sucesso!\n");
+        break;
+      }
+    }
+
+  if (!encontrada) {
+    printf("Casa com ID %d não encontrada.\n", id);
+  }
 }
