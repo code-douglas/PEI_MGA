@@ -45,7 +45,7 @@ int main () {
       break;
     
     default:
-      printf("Opção invalida! Tente novamente");
+      printf("Opção inválida! Tente novamente");
       break;
     }
   } while (opcao != 0);
@@ -100,15 +100,15 @@ void registrarConsumoMensal(Residencia casas[], int *quantidade) {
   for(int i = 0; i < *quantidade; i++) {
     if(casas[i].id == id) {
       encontrada = 1;
-      printf("Digite o m?s (1-12): ");
+      printf("Digite o mês (1-12): ");
       scanf("%d", &mes);
 
       if (mes < 1 || mes > 12) {
-        printf("M?s inv?lido! Tente novamente.\n");
+        printf("Mês inválido! Tente novamente.\n");
           return;
       }
 
-        printf("Digite o consumo em metros c?bicos: ");
+        printf("Digite o consumo em metros cúbicos: ");
         scanf("%f", &consumo);
         casas[i].consumo[mes - 1] = consumo;
         printf("Consumo registrado com sucesso!\n");
@@ -117,6 +117,6 @@ void registrarConsumoMensal(Residencia casas[], int *quantidade) {
     }
 
   if (!encontrada) {
-    printf("Casa com ID %d n?o encontrada.\n", id);
+    printf("Casa com ID %d não encontrada.\n", id);
   }
 }
