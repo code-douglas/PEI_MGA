@@ -27,7 +27,7 @@ int main () {
   
   do {
     menu();
-    printf("Escolha uma opção: ");
+    printf("Escolha uma opÃ§Ã£o: ");
     scanf("%d", &opcao);
     fflush(stdin);
 
@@ -45,24 +45,24 @@ int main () {
       break;
     
     default:
-      printf("Opção invalida! Tente novamente");
+      printf("OpÃ§Ã£o invalida! Tente novamente");
       break;
     }
   } while (opcao != 0);
 };
 
 void menu() {
-  printf("\nMenu de Opções\n");
+  printf("\nMenu de OpÃ§Ãµes\n");
   printf("1 - Cadastrar casa\n");
   printf("2 - Registrar consumo mensal\n");
-  printf("3 - Exibir casas acima da média\n");
-  printf("4 - Exibir casas abaixo da média\n");
+  printf("3 - Exibir casas acima da mÃ©dia\n");
+  printf("4 - Exibir casas abaixo da mÃ©dia\n");
   printf("0 - Sair\n");
 };
 
 void cadastrarCasa(Residencia casas[], int *quantidade) {
     if (*quantidade >= MAX_CASAS) {
-        printf("Capacidade máxima de casas atingida!\n");
+        printf("Capacidade mÃ¡xima de casas atingida!\n");
         return;
     }
 
@@ -94,28 +94,31 @@ void registrarConsumoMensal(Residencia casas[], int *quantidade) {
   float consumo;
   printf("Digite o ID da casa: ");
   scanf("%d", &id);
+  fflush(stdin);
 
   int encontrada = 0;
   for (int i = 0; i < *quantidade; i++) {
     if (casas[i].id == id) {
       encontrada = 1;
-      printf("Digite o mês (1-12): ");
+      printf("Digite o mÃªs (1-12): ");
       scanf("%d", &mes);
+      fflush(stdin);
 
       if (mes < 1 || mes > 12) {
-        printf("Mês inválido! Tente novamente.\n");
-          return;
+        printf("MÃªs invÃ¡lido! Tente novamente.\n");
+        return;
       }
 
-        printf("Digite o consumo em metros cúbicos: ");
+        printf("Digite o consumo em metros cÃºbicos: ");
         scanf("%f", &consumo);
+        fflush(stdin);
         casas[i].consumo[mes - 1] = consumo;
         printf("Consumo registrado com sucesso!\n");
-        break;
+        
       }
     }
 
   if (!encontrada) {
-    printf("Casa com ID %d não encontrada.\n", id);
+    printf("Casa com ID %d nÃ£o encontrada.\n", id);
   }
 }
