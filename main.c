@@ -17,7 +17,7 @@ void menu();
 void cadastrarCasa(Residencia casas[], int *quantidade);
 void registrarConsumoMensal(Residencia casas[], int *quantidade);
 
-int main () {
+int main() {
 
   setlocale(LC_ALL, "Portuguese");
 
@@ -32,22 +32,21 @@ int main () {
     fflush(stdin);
 
     switch (opcao) {
-    case 1:
-      cadastrarCasa(casas, &quantidadeCasas);
-      fflush(stdin);
-      break;
-    case 2: 
-      registrarConsumoMensal(casas, &quantidadeCasas);
-      break;
-    case 0:
-      printf("Encerrando programa... \n");
-      fflush(stdin);
-      break;
-    
-    default:
-      printf("Opção inválida! Tente novamente");
-      break;
-    }
+      case 1:
+        cadastrarCasa(casas, &quantidadeCasas);
+        fflush(stdin);
+        break;
+      case 2: 
+        registrarConsumoMensal(casas, &quantidadeCasas);
+        break;
+      case 0:
+        printf("Encerrando programa... \n");
+        fflush(stdin);
+        break;
+      default:
+        printf("Opção inválida! Tente novamente");
+        break;
+      }
   } while (opcao != 0);
 };
 
@@ -61,32 +60,32 @@ void menu() {
 };
 
 void cadastrarCasa(Residencia casas[], int *quantidade) {
-    if (*quantidade >= MAX_CASAS) {
-        printf("Capacidade máxima de casas atingida!\n");
-        return;
-    }
+  if (*quantidade >= MAX_CASAS) {
+    printf("Capacidade máxima de casas atingida!\n");
+    return;
+  }
 
-    Residencia novaCasa;
-    printf("Digite o ID da casa: ");
-    scanf("%d", &novaCasa.id);
-    fflush(stdin);
+  Residencia novaCasa;
+  printf("Digite o ID da casa: ");
+  scanf("%d", &novaCasa.id);
+  fflush(stdin);
 
-    printf("Digite o nome do morador principal: ");
-    fflush(stdin);
-    fgets(novaCasa.morador, 50, stdin);
-    novaCasa.morador[strcspn(novaCasa.morador, "\n")] = '\0'; 
+  printf("Digite o nome do morador principal: ");
+  fflush(stdin);
+  fgets(novaCasa.morador, 50, stdin);
+  novaCasa.morador[strcspn(novaCasa.morador, "\n")] = '\0'; 
 
-    printf("Digite a quantidade de moradores: ");
-    fflush(stdin);
-    scanf("%d", &novaCasa.moradores);
+  printf("Digite a quantidade de moradores: ");
+  fflush(stdin);
+  scanf("%d", &novaCasa.moradores);
 
-    for (int i = 0; i < MESES; i++) {
-        novaCasa.consumo[i] = 0.0;
-    }
+  for (int i = 0; i < MESES; i++) {
+    novaCasa.consumo[i] = 0.0;
+  }
 
-    casas[*quantidade] = novaCasa;
-    (*quantidade)++;
-    printf("Casa cadastrada com sucesso!\n");
+  casas[*quantidade] = novaCasa;
+  (*quantidade)++;
+  printf("Casa cadastrada com sucesso!\n");
 }
 
 void registrarConsumoMensal(Residencia casas[], int *quantidade) {
@@ -105,16 +104,15 @@ void registrarConsumoMensal(Residencia casas[], int *quantidade) {
 
       if (mes < 1 || mes > 12) {
         printf("Mês inválido! Tente novamente.\n");
-          return;
+        return;
       }
 
-        printf("Digite o consumo em metros cúbicos: ");
-        scanf("%f", &consumo);
-        casas[i].consumo[mes - 1] = consumo;
-        printf("Consumo registrado com sucesso!\n");
-        break;
-      }
+      printf("Digite o consumo em metros cúbicos: ");
+      scanf("%f", &consumo);
+      casas[i].consumo[mes - 1] = consumo;
+      printf("Consumo registrado com sucesso!\n");
     }
+  }
 
   if (!encontrada) {
     printf("Casa com ID %d não encontrada.\n", id);
