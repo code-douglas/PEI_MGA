@@ -16,17 +16,28 @@ typedef struct
 
 void menu();
 void cadastrarCasa(Residencia casas[], int *quantidade);
-void registrarConsumoMensal(Residencia casas[], int *quantidade);
-void exibirCasasAcimaMedia(Residencia casas[], int quantidade, float media);
-void exibirCasasAbaixoMedia(Residencia casas[], int quantidade, float media);
+void registrarConsumoMensal(Residencia casas[], int quantidade);
+void exibirCasasAcimaMedia(Residencia casas[], int quantidade);
+void exibirCasasAbaixoMedia(Residencia casas[], int quantidade);
 
 int main()
 {
   setlocale(LC_ALL, "Portuguese");
-  Residencia casas[MAX_CASAS] = {0};
+  Residencia casas[MAX_CASAS];
   int quantidadeCasas = 0;
-  int opcao;
 
+  for (int i = 0; i < MAX_CASAS; i++)
+  {
+    casas[i].id = 0;
+    casas[i].moradores = 0;
+    strcpy(casas[i].morador, "");
+    for (int j = 0; j < MESES; j++)
+    {
+      casas[i].consumo[j] = 0.0;
+    }
+  }
+
+  int opcao;
   do
   {
     menu();
@@ -41,27 +52,19 @@ int main()
       fflush(stdin);
       break;
     case 2:
-      registrarConsumoMensal(casas, &quantidadeCasas);
+      registrarConsumoMensal(casas, quantidadeCasas);
+      fflush(stdin);
       break;
     case 3:
-    {
-      float media;
-      printf("Digite a média desejada: ");
-      scanf("%f", &media);
-      exibirCasasAcimaMedia(casas, quantidadeCasas, media);
-      break;
-    }
-    case 4:
-    {
-      float media;
-      printf("Digite a média desejada: ");
-      scanf("%f", &media);
-      exibirCasasAbaixoMedia(casas, quantidadeCasas, media);
-      break;
-    }
-    case 0:
-      printf("Encerrando programa... \n");
+      exibirCasasAcimaMedia(casas, quantidadeCasas);
       fflush(stdin);
+      break;
+    case 4:
+      exibirCasasAbaixoMedia(casas, quantidadeCasas);
+      fflush(stdin);
+      break;
+    case 0:
+      printf("Encerrando programa...\n");
       break;
     default:
       printf("Opção inválida! Tente novamente\n");
@@ -75,7 +78,7 @@ void menu()
   printf("\nMenu de Opções\n");
   printf("1 - Cadastrar casa\n");
   printf("2 - Registrar consumo mensal\n");
-  printf("3 - Exibir casas acima da média\n");
+  printf("3 - Exibir casas acima do limite de consumo\n");
   printf("4 - Exibir casas abaixo da média\n");
   printf("0 - Sair\n");
 }
@@ -94,12 +97,10 @@ void cadastrarCasa(Residencia casas[], int *quantidade)
   fflush(stdin);
 
   printf("Digite o nome do morador principal: ");
-  fflush(stdin);
   fgets(novaCasa.morador, 50, stdin);
   novaCasa.morador[strcspn(novaCasa.morador, "\n")] = '\0';
 
   printf("Digite a quantidade de moradores: ");
-  fflush(stdin);
   scanf("%d", &novaCasa.moradores);
 
   for (int i = 0; i < MESES; i++)
@@ -112,16 +113,15 @@ void cadastrarCasa(Residencia casas[], int *quantidade)
   printf("Casa cadastrada com sucesso!\n");
 }
 
-void registrarConsumoMensal(Residencia casas[], int *quantidade)
+void registrarConsumoMensal(Residencia casas[], int quantidade)
 {
   int id, mes;
   float consumo;
   printf("Digite o ID da casa: ");
   scanf("%d", &id);
-  fflush(stdin);
 
   int encontrada = 0;
-  for (int i = 0; i < *quantidade; i++)
+  for (int i = 0; i < quantidade; i++)
   {
     if (casas[i].id == id)
     {
@@ -137,11 +137,12 @@ void registrarConsumoMensal(Residencia casas[], int *quantidade)
 
       printf("Digite o consumo em metros cúbicos: ");
       scanf("%f", &consumo);
+
       if (consumo > LIMITE_CONSUMO)
       {
-        printf("Consumo máximo permitido é %.2f. Registro ajustado para %.2f.\n", LIMITE_CONSUMO, LIMITE_CONSUMO);
-        consumo = LIMITE_CONSUMO;
+        printf("Atenção: o consumo informado (%.2f) excede o limite recomendado de %.2f.\n", consumo, LIMITE_CONSUMO);
       }
+
       casas[i].consumo[mes - 1] = consumo;
       printf("Consumo registrado com sucesso!\n");
       return;
@@ -154,62 +155,51 @@ void registrarConsumoMensal(Residencia casas[], int *quantidade)
   }
 }
 
-void exibirCasasAcimaMedia(Residencia casas[], int quantidade, float media)
+void exibirCasasAcimaMedia(Residencia casas[], int quantidade)
 {
-  printf("\nResidências com consumo acima da média mensal de %.2f m³:\n", media);
+  printf("\nResidências com consumo mensal acima do limite de %.2f m³:\n", LIMITE_CONSUMO);
   int encontrou = 0;
 
   for (int i = 0; i < quantidade; i++)
   {
-    float totalConsumo = 0.0;
-
     for (int j = 0; j < MESES; j++)
     {
-      totalConsumo += casas[i].consumo[j];
-    }
-
-    float mediaResidencia = totalConsumo / MESES;
-
-    if (mediaResidencia > media)
-    {
-      encontrou = 1;
-      printf("ID: %d | Morador: %s | Consumo Médio Anual: %.2f m³\n",
-             casas[i].id, casas[i].morador, mediaResidencia);
+      if (casas[i].consumo[j] > LIMITE_CONSUMO)
+      {
+        encontrou = 1;
+        printf("ID: %d | Morador: %s | Mês: %d | Consumo: %.2f m³\n",
+               casas[i].id, casas[i].morador, j + 1, casas[i].consumo[j]);
+      }
     }
   }
 
   if (!encontrou)
   {
-    printf("Nenhuma residência com consumo acima da média especificada.\n");
+    printf("Nenhuma residência com consumo mensal acima do limite de %.2f m³.\n", LIMITE_CONSUMO);
   }
 }
 
-void exibirCasasAbaixoMedia(Residencia casas[], int quantidade, float media)
+void exibirCasasAbaixoMedia(Residencia casas[], int quantidade)
 {
-  printf("\nResidências com consumo abaixo ou dentro da média mensal de %.2f m³:\n", media);
+  printf("\nResidências com consumo mensal abaixo do limite de %.2f m³:\n", LIMITE_CONSUMO);
   int encontrou = 0;
 
   for (int i = 0; i < quantidade; i++)
   {
-    float totalConsumo = 0.0;
-
     for (int j = 0; j < MESES; j++)
     {
-      totalConsumo += casas[i].consumo[j];
-    }
-
-    float mediaResidencia = totalConsumo / MESES;
-
-    if (mediaResidencia <= media)
-    {
-      encontrou = 1;
-      printf("ID: %d | Morador: %s | Consumo Médio Anual: %.2f m³\n",
-             casas[i].id, casas[i].morador, mediaResidencia);
+      if (casas[i].consumo[j] < LIMITE_CONSUMO)
+      {
+        encontrou = 1;
+        printf("ID: %d | Morador: %s | Mês: %d | Consumo: %.2f m³\n",
+               casas[i].id, casas[i].morador, j + 1, casas[i].consumo[j]);
+        break;
+      }
     }
   }
 
   if (!encontrou)
   {
-    printf("Nenhuma residência com consumo abaixo ou dentro da média especificada.\n");
+    printf("Nenhuma residência com consumo mensal abaixo do limite de %.2f m³.\n", LIMITE_CONSUMO);
   }
 }
